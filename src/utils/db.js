@@ -111,3 +111,27 @@ export function formatDate(dateStr) {
 export function todayString() {
     return new Date().toISOString().split('T')[0];
 }
+
+export function sendWhatsAppReady(order) {
+    const digits = (order.customer?.phone || '').replace(/\D/g, '').slice(-10);
+    if (!digits || digits.length < 10) return;
+    const phone = '91' + digits;
+    const name = order.customer?.name || 'ગ્રાહક';
+    const total = parseFloat(order.totalAmount || 0);
+    const advance = parseFloat(order.advanceAmount || 0);
+    const balance = total - advance;
+    const balanceText = balance > 0
+        ? `\n💰 બાકી રકમ: ₹${balance}`
+        : '\n✅ સંપૂર્ણ ચૂકવ્યું';
+    const blouseCount = order.blouses?.length || 0;
+    const msg =
+        `નમસ્તે ${name}! 🙏\n\n` +
+        `આપનો ઓર્ડર તૈયાર છે! ✅\n\n` +
+        `📋 Bill No: ${order.billNumber}\n` +
+        `👗 Blouses: ${blouseCount}\n` +
+        `💵 Total: ₹${total}` +
+        `${balanceText}\n\n` +
+        `કૃપા કરી અમારી દુકાને આવી આપનો ઓર્ડર લઈ જાઓ.\n\n` +
+        `✂️ Ladies Tailor Shop`;
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+}
