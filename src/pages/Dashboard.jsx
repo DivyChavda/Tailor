@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getStats, getAllOrders, saveOrder, formatDate } from '../utils/db';
+import { getStats, getAllOrders, saveOrder, formatDate, sendWhatsAppReady } from '../utils/db';
 import PaymentModal from '../components/PaymentModal';
 import CollectPaymentModal from '../components/CollectPaymentModal';
 
@@ -41,7 +41,10 @@ export default function Dashboard() {
         }
         const orders = getAllOrders();
         const order = orders.find((o) => o.id === orderId);
-        if (order) { saveOrder({ ...order, status: newStatus, updatedAt: new Date().toISOString() }); }
+        if (order) {
+            saveOrder({ ...order, status: newStatus, updatedAt: new Date().toISOString() });
+            if (newStatus === 'ready') sendWhatsAppReady({ ...order, status: 'ready' });
+        }
         setRefresh((r) => r + 1);
     };
 

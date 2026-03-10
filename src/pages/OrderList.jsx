@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { getAllOrders, saveOrder, formatDate } from '../utils/db';
+import { getAllOrders, saveOrder, formatDate, sendWhatsAppReady } from '../utils/db';
 import PaymentModal from '../components/PaymentModal';
 import CollectPaymentModal from '../components/CollectPaymentModal';
 
@@ -38,7 +38,10 @@ export default function OrderList() {
             }
         }
         const order = orders.find((o) => o.id === id);
-        if (order) { saveOrder({ ...order, status: newStatus, updatedAt: new Date().toISOString() }); }
+        if (order) {
+            saveOrder({ ...order, status: newStatus, updatedAt: new Date().toISOString() });
+            if (newStatus === 'ready') sendWhatsAppReady({ ...order, status: 'ready' });
+        }
         reload();
     };
 
@@ -167,16 +170,16 @@ export default function OrderList() {
                                     parseFloat(order.totalAmount || 0) - parseFloat(order.advanceAmount || 0);
                                 return (
                                     <tr key={order.id} className="order-row" onClick={() => navigate(`/orders/${order.id}`)}>
-                                        <td>
+                                        <td data-label="Bill No">
                                             <span className="bill-tag">{order.billNumber}</span>
                                         </td>
-                                        <td className="customer-name-cell">{order.customer?.name}</td>
-                                        <td>{order.customer?.phone}</td>
-                                        <td>{formatDate(order.orderDate)}</td>
-                                        <td>{formatDate(order.deliveryDate)}</td>
-                                        <td className="center-cell">{order.blouses?.length || 0}</td>
-                                        <td className="amount-cell">₹{order.totalAmount || 0}</td>
-                                        <td className={balance > 0 ? 'balance-due-cell' : 'balance-zero-cell'}>
+                                        <td className="customer-name-cell" data-label="Customer">{order.customer?.name}</td>
+                                        <td data-label="Phone">{order.customer?.phone}</td>
+                                        <td data-label="Order Date">{formatDate(order.orderDate)}</td>
+                                        <td data-label="Delivery">{formatDate(order.deliveryDate)}</td>
+                                        <td className="center-cell" data-label="Blouses">{order.blouses?.length || 0}</td>
+                                        <td className="amount-cell" data-label="Amount">₹{order.totalAmount || 0}</td>
+                                        <td className={balance > 0 ? 'balance-due-cell' : 'balance-zero-cell'} data-label="Balance">
                                             {balance > 0 ? (
                                                 <button
                                                     className="btn-collect-sm"
@@ -188,7 +191,7 @@ export default function OrderList() {
                                                 <span className="balance-zero-cell">✅ Paid</span>
                                             )}
                                         </td>
-                                        <td onClick={(e) => e.stopPropagation()}>
+                                        <td data-label="Status" onClick={(e) => e.stopPropagation()}>
                                             <select
                                                 className="status-select-inline"
                                                 value={order.status}

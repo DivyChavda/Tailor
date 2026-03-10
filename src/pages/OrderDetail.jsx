@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { getOrderById, deleteOrder, formatDate, saveOrder } from '../utils/db';
+import { getOrderById, deleteOrder, formatDate, saveOrder, sendWhatsAppReady } from '../utils/db';
 import BillPrint from '../components/BillPrint';
 import WorkerSheet from '../components/WorkerSheet';
 import PaymentModal from '../components/PaymentModal';
@@ -66,6 +66,7 @@ export default function OrderDetail() {
         }
         saveOrder({ ...order, status: newStatus, updatedAt: new Date().toISOString() });
         setOrder((prev) => ({ ...prev, status: newStatus }));
+        if (newStatus === 'ready') sendWhatsAppReady({ ...order, status: 'ready' });
     };
 
     const confirmPayment = () => {
