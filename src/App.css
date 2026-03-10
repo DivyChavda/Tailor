@@ -1,10 +1,16 @@
 ﻿/* Global Reset & Variables */
+html {
+  overflow-x: hidden;
+  width: 100%;
+}
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  min-width: 0;
 }
 
 :root {
@@ -39,6 +45,8 @@ body {
   font-size: 16px;
   line-height: 1.5;
   -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 /* Layout */
@@ -46,11 +54,15 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .app-main {
   margin-top: var(--navbar-h);
   flex: 1;
+  min-width: 0;
+  width: 100%;
 }
 
 /* Navbar */
@@ -73,6 +85,8 @@ body {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .brand-icon {
@@ -82,6 +96,8 @@ body {
 .brand-text {
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .brand-name {
@@ -90,6 +106,9 @@ body {
   font-weight: 800;
   letter-spacing: 0.08em;
   line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .brand-sub {
@@ -140,6 +159,9 @@ body {
   padding: 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .page-header {
@@ -929,7 +951,7 @@ body {
 
 .sketch-canvas {
   width: 100%;
-  max-width: 900px;
+  max-width: 100%;
   border: 2px solid var(--clr-border);
   border-radius: var(--radius-sm);
   display: block;
@@ -1365,12 +1387,14 @@ body {
   margin-bottom: 1.5rem;
   flex-wrap: wrap;
   align-items: center;
+  width: 100%;
+  min-width: 0;
 }
 
 .search-wrapper {
   position: relative;
   flex: 1;
-  min-width: 220px;
+  min-width: 0;
   max-width: 400px;
 }
 
@@ -1519,7 +1543,8 @@ body {
   font-size: 0.82rem;
   font-weight: 700;
   cursor: pointer;
-  min-width: 110px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 /* Order Detail */
@@ -2613,41 +2638,395 @@ body {
   }
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* ===== HAMBURGER BUTTON (hidden on desktop/laptop) ===== */
+.hamburger-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  transition: background 0.2s;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.hamburger-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.hamburger-btn span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #fff;
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.hamburger-btn.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger-btn.open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.hamburger-btn.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ===== MOBILE DROPDOWN MENU ===== */
+.mobile-menu {
+  position: fixed;
+  top: var(--navbar-h);
+  left: 0;
+  right: 0;
+  background: var(--clr-primary-dk);
+  display: flex;
+  flex-direction: column;
+  z-index: 999;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  animation: slideDown 0.22s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mobile-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background 0.2s;
+}
+
+.mobile-nav-link:last-child {
+  border-bottom: none;
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link.active {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+.mobile-nav-link .nav-icon {
+  font-size: 1.3rem;
+}
+
+/* ===================== RESPONSIVE BREAKPOINTS ===================== */
+/* Mobile-first, 5 tiers:
+   ≤ 1199px  laptop
+   ≤ 1023px  tablet
+   ≤  767px  large phone / small tablet
+   ≤  479px  phone
+   ≤  359px  small phone
+*/
+
+/* ── Laptop (≤ 1199px) ── */
+@media (max-width: 1199px) {
   .page {
-    padding: 1rem;
+    padding: 1.25rem;
+    max-width: 100%;
+  }
+}
+
+/* ── Tablet (≤ 1023px) ── */
+@media (max-width: 1023px) {
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+  }
+
+  .order-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .blouses-detail-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .detail-cards-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Measurements: 2-column on tablet */
+  .measurements-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .step-line {
+    width: 40px;
+  }
+
+  /* ── Orders table → card layout starts at tablet ── */
+  .orders-table-wrapper {
+    overflow-x: hidden;
+    box-shadow: none;
+    border-radius: 0;
+    background: transparent;
+    width: 100%;
+  }
+
+  /* Remove table formatting context so rows can be display:grid */
+  .orders-table {
+    display: block;
+    width: 100%;
+    min-width: unset;
+    background: transparent;
+    border-collapse: unset;
+  }
+
+  .orders-table tbody {
+    display: block;
+    width: 100%;
+  }
+
+  .orders-table thead {
+    display: none;
+  }
+
+  .orders-table tbody tr.order-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    background: var(--clr-surface);
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-md);
+    margin-bottom: 0.85rem;
+    padding: 0.85rem 1rem 0.5rem;
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition: box-shadow 0.2s, border-color 0.2s;
+  }
+
+  .orders-table tbody tr.order-row:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--clr-primary);
+  }
+
+  .orders-table td {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 0.3rem 0.4rem 0.5rem;
+    border-bottom: none;
+    font-size: 0.88rem;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .orders-table td[data-label]::before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: var(--clr-text-light);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.2rem;
+    display: block;
+  }
+
+  /* Bill No spans full width at top */
+  .orders-table td:nth-child(1) {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.2rem;
+    border-bottom: 1px solid var(--clr-border);
+  }
+
+  .orders-table td:nth-child(1)::before {
+    display: none;
+  }
+
+  /* Actions (last cell) spans full width at bottom */
+  .orders-table td:last-child {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    padding-top: 0.5rem;
+    margin-top: 0.25rem;
+    border-top: 1px solid var(--clr-border);
+  }
+
+  .orders-table td:last-child::before {
+    display: none;
+  }
+
+  /* Status cell spans full width */
+  .orders-table td:nth-child(9) {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+    padding-top: 0.4rem;
+    margin-top: 0.2rem;
+    border-top: 1px solid var(--clr-border);
+  }
+
+  .orders-table td:nth-child(9)::before {
+    margin-bottom: 0;
+  }
+
+  .status-select-inline {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Blouse count center-align */
+  .orders-table td.center-cell {
+    text-align: left;
+  }
+
+  /* ── Search bar above filter chips on tablet ── */
+  .orders-filters {
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .search-wrapper {
+    max-width: 100%;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .status-filters {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 0.25rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .status-filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-btn {
+    flex-shrink: 0;
+  }
+}
+
+/* ── Large Phone / Small Tablet (≤ 767px) ── */
+@media (max-width: 767px) {
+  :root {
+    --navbar-h: 60px;
+  }
+
+  .page {
+    padding: 0.875rem;
   }
 
   .page-title {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
   }
 
+  /* Stack page header */
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .page-header .btn-primary,
+  .page-header .btn-outline {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Navbar — show hamburger, hide desktop links */
+  .hamburger-btn {
+    display: flex;
+  }
+
+  .navbar-links {
+    display: none;
+  }
+
+  .brand-sub {
+    display: none;
+  }
+
+  /* Stats */
   .stats-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 0.6rem;
   }
 
   .stat-number {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
 
+  /* Grids → single column */
+  .order-cards-grid,
+  .blouses-detail-grid,
+  .detail-cards-row {
+    grid-template-columns: 1fr;
+  }
+
+  /* Stepper */
   .stepper {
-    padding-top: 1rem;
+    padding: 1rem 0.25rem 0;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
 
-  .step-label span {
-    font-size: 0.7rem;
+  .stepper::-webkit-scrollbar {
+    display: none;
+  }
+
+  .stepper-item {
+    flex-shrink: 0;
+  }
+
+  .step-label {
+    min-width: 70px;
+    font-size: 0.72rem;
   }
 
   .step-line {
-    width: 30px;
+    width: 24px;
   }
 
+  /* Measurements */
   .measurements-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
+  /* Forms */
   .form-row.two-col {
     flex-direction: column;
   }
@@ -2656,32 +3035,368 @@ body {
     max-width: 100%;
   }
 
-  .order-cards-grid,
-  .blouses-detail-grid,
-  .detail-cards-row {
-    grid-template-columns: 1fr;
+  /* Blouse form */
+  .blouse-basic-row {
+    flex-direction: column;
+    gap: 0;
   }
 
-  .navbar-links .nav-label {
+  .blouse-basic-row .form-group {
+    min-width: 100%;
+  }
+
+  /* Blouse card header — prevent overflow */
+  .blouse-card-header {
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
+
+  .blouse-header-left {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .blouse-header-info {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .blouse-title,
+  .blouse-subtitle {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Blouse tabs — scroll horizontally */
+  .blouse-tabs {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .blouse-tabs::-webkit-scrollbar {
     display: none;
   }
 
-  .nav-link {
-    min-width: 48px;
+  .tab-btn {
+    flex-shrink: 0;
+  }
+
+  /* Detail page actions */
+  .detail-actions {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .detail-actions .btn-print,
+  .detail-actions .btn-print-worker {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+  }
+
+  .status-select-large {
+    width: 100%;
+  }
+
+  /* Step navigation buttons */
+  .step-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .step-actions .btn-primary,
+  .step-actions .btn-outline {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Save actions */
+  .save-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .save-actions .btn-primary,
+  .save-actions .btn-outline {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Bill summary */
+  .summary-customer {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .summary-dates {
+    text-align: left;
+  }
+
+  /* Summary table scroll */
+  .summary-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Modal — slides up from bottom */
+  .modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modal-box {
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    padding: 1.5rem 1.25rem 2rem;
+    max-width: 100%;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: modal-slide-up 0.25s ease;
+  }
+
+  @keyframes modal-slide-up {
+    from {
+      transform: translateY(100%);
+    }
+
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  .modal-actions {
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+  }
+
+  .modal-actions .btn-primary,
+  .modal-actions .btn-outline {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Step heading — allow wrap */
+  .step-heading {
+    font-size: 1.2rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
 
   .color-dot {
     width: 24px;
     height: 24px;
   }
-}
 
-@media (max-width: 480px) {
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
+  /* Sketch toolbar — scroll horizontally */
+  .sketch-toolbar {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 0.5rem;
   }
 
+  .sketch-toolbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .toolbar-group {
+    flex-shrink: 0;
+  }
+
+  /* Advance input full-width */
+  .advance-input {
+    width: 100%;
+  }
+
+  /* Orders table cards — 1-column on phone */
+  .orders-table tbody tr.order-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ── Phone (≤ 479px) ── */
+@media (max-width: 479px) {
+  :root {
+    --navbar-h: 56px;
+  }
+
+  .page {
+    padding: 0.75rem;
+  }
+
+  /* Stats → 2 columns */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  .stat-card {
+    padding: 0.8rem 0.5rem;
+  }
+
+  .stat-icon-big {
+    font-size: 1.35rem;
+  }
+
+  .stat-number {
+    font-size: 1.25rem;
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+  }
+
+  .brand-name {
+    font-size: 0.88rem;
+    letter-spacing: 0.03em;
+  }
+
+  /* Orders table cards — truly 1 column layout */
+  .orders-table tbody tr.order-row {
+    grid-template-columns: 1fr;
+  }
+
+  /* Compact stepper */
+  .step-circle {
+    width: 38px;
+    height: 38px;
+    font-size: 1rem;
+  }
+
+  .step-label {
+    min-width: 60px;
+    font-size: 0.67rem;
+  }
+
+  .step-gu {
+    display: none;
+  }
+
+  .step-line {
+    width: 12px;
+  }
+
+  /* Blouse form */
+  .blouse-card-header {
+    padding: 0.75rem 0.85rem;
+  }
+
+  .blouse-card-body {
+    padding: 0.85rem;
+  }
+
+  /* Measurements — still 2 col, but smaller inputs */
   .measurements-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  .measurement-input {
+    padding: 0.5rem 0.4rem;
+    font-size: 0.9rem;
+  }
+
+  /* Compact sketch */
+  .tool-btn {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.76rem;
+  }
+
+  .tab-btn {
+    padding: 0.55rem 0.7rem;
+    font-size: 0.78rem;
+  }
+
+  /* Form inputs */
+  .form-input {
+    padding: 0.65rem 0.85rem;
+    font-size: 0.95rem;
+  }
+
+  .form-input.large-input {
+    padding: 0.75rem 0.85rem;
+    min-height: 46px;
+  }
+
+  /* Page title */
+  .page-title {
+    font-size: 1.15rem;
+  }
+
+  .page-subtitle {
+    font-size: 0.82rem;
+  }
+
+  /* Step heading */
+  .step-heading {
+    font-size: 1.1rem;
+  }
+
+  /* Button sizes */
+  .btn-primary.large-btn,
+  .btn-outline.large-btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.92rem;
+    min-height: 46px;
+  }
+}
+
+/* ── Small Phone (≤ 359px) ── */
+@media (max-width: 359px) {
+  .brand-name {
+    font-size: 0.78rem;
+  }
+
+  .brand-icon {
+    font-size: 1.3rem;
+  }
+
+  .page-title {
+    font-size: 1rem;
+  }
+
+  .stats-grid {
+    gap: 0.35rem;
+  }
+
+  .stat-card {
+    padding: 0.6rem 0.35rem;
+  }
+
+  .stat-number {
+    font-size: 1.05rem;
+  }
+
+  .stat-label,
+  .stat-gu {
+    font-size: 0.65rem;
+  }
+
+  .step-circle {
+    width: 34px;
+    height: 34px;
+    font-size: 0.9rem;
+  }
+
+  .step-line {
+    width: 8px;
+  }
+
+  .step-label {
+    min-width: 50px;
+    font-size: 0.62rem;
+  }
+
+  .btn-primary,
+  .btn-outline {
+    padding: 0.55rem 0.85rem;
+    font-size: 0.85rem;
   }
 }
